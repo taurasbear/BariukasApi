@@ -1,0 +1,11 @@
+@BariukasApi_HostAddress = http://localhost:5198
+
+GET {{BariukasApi_HostAddress}}/openapi/v1.json
+Accept: application/json
+
+###
+
+GET {{BariukasApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

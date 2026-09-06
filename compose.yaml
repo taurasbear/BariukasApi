@@ -1,0 +1,7 @@
+﻿services:
+  bariukasapi:
+    image: bariukasapi
+    build:
+      context: .
+      dockerfile: BariukasApi/Dockerfile
+
