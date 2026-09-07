@@ -3,15 +3,10 @@ using BariukasApi.Shared;
 namespace BariukasApi.WorksheetFeatures.GetWorksheet;
 
 [QueryType]
-public partial class GetWorksheetQuery
+public partial class GetWorksheetQuery(GetWorksheetHandler getWorksheetHandler, ILogger<GetWorksheetQuery> logger)
 {
-    public static WorksheetDocument GetWorksheet(int id) => new WorksheetDocument
+    public async Task<WorksheetDocument> GetWorksheet(Guid id, CancellationToken ct)
     {
-        Customer = id.ToString(), 
-        ProductCode = id.ToString(),
-        SoldQuantity = 2,
-        ScannedQuantity = 1,
-        SellingPrice = 5.5m,
-        SupplierPrice = 5.5m
-    };
+        return await getWorksheetHandler.HandleAsync(id, ct);
+    }
 }

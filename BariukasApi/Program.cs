@@ -1,22 +1,44 @@
+using BariukasApi.Shared;
+using BariukasApi.WorksheetFeatures.GetWorksheet;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
+
+BsonSerializer.TryRegisterSerializer(typeof(Guid), GuidSerializer.StandardInstance);
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddGraphQL().AddBariukasApiTypes();
+// TODO: remove the modify request options
+builder.AddGraphQL().AddBariukasApiTypes().ModifyRequestOptions(o => o.IncludeExceptionDetails = true);
+
+builder.Services.AddScoped<GetWorksheetHandler>();
+
+builder.Services.AddSingleton<IMongoClient>(sp =>
+    new MongoClient(builder.Configuration["MongoDB:ConnectionString"]));
+
+builder.Services.AddSingleton<IMongoDatabase>(sp =>
+    sp.GetRequiredService<IMongoClient>()
+        .GetDatabase(builder.Configuration["MongoDB:DatabaseName"]));
+
+builder.Services.AddSingleton<IMongoCollection<WorksheetDocument>>(sp =>
+    sp.GetRequiredService<IMongoDatabase>()
+        .GetCollection<WorksheetDocument>(builder.Configuration["MongoDB:WorksheetCollectionName"]));
 
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+app.Logger.LogInformation("Booted {Time}", DateTimeOffset.Now);
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
 app.UseHttpsRedirection();
 
 app.MapGraphQL();
 
-app.RunWithGraphQLCommands(args);
+// app.RunWithGraphQLCommands(args);
+app.Run();
+
+
 // var summaries = new[]
 // {
 //     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"

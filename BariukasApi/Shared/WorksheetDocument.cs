@@ -2,6 +2,8 @@ namespace BariukasApi.Shared;
 
 public class WorksheetDocument
 {
+    public Guid Id { get; set; }
+
     public string Customer { get; set; } = null!;
 
     public string ProductCode { get; set; } = null!;
