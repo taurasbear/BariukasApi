@@ -1,3 +1,4 @@
+using BariukasApi.Capabilities;
 using BariukasApi.Shared;
 using BariukasApi.WorksheetFeatures.GetWorksheet;
 using MongoDB.Bson.Serialization;
@@ -23,10 +24,11 @@ builder.Services.AddSingleton<IMongoCollection<WorksheetDocument>>(sp =>
     sp.GetRequiredService<IMongoDatabase>()
         .GetCollection<WorksheetDocument>(builder.Configuration["MongoDB:WorksheetCollectionName"]));
 
+builder.RegisterEndpoints();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
-app.Logger.LogInformation("Booted {Time}", DateTimeOffset.Now);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
@@ -34,6 +36,7 @@ if (app.Environment.IsDevelopment()) app.MapOpenApi();
 app.UseHttpsRedirection();
 
 app.MapGraphQL();
+app.MapEndpoints();
 
 // app.RunWithGraphQLCommands(args);
 app.Run();
