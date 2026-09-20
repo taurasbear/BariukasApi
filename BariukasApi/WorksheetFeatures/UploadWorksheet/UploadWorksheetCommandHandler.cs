@@ -10,7 +10,7 @@ public class UploadWorksheetCommandHandler(
     IMongoCollection<WorksheetDocument> worksheetCollection,
     ILogger<UploadWorksheetCommandHandler> logger)
 {
-    public async Task<FluentResults.Result<UploadWorksheetResponse>> Handle(UploadWorksheetCommand request,
+    public async Task<FluentResults.Result<UploadWorksheetResponse>> HandleAsync(UploadWorksheetCommand request,
         CancellationToken ct)
     {
         try

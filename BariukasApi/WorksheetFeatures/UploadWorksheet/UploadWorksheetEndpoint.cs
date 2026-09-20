@@ -13,7 +13,7 @@ public class UploadWorksheetEndpoint(UploadWorksheetCommandHandler handler, ILog
         app.MapPost("/worksheet",
             async ([FromForm] UploadWorksheetCommand request, CancellationToken ct) =>
             {
-                var result = await handler.Handle(request, ct);
+                var result = await handler.HandleAsync(request, ct);
 
                 return result.IsFailed
                     ? Results.BadRequest(new UploadWorksheetErrorResponse
