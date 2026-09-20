@@ -38,7 +38,7 @@ public class UploadWorksheetEndpoint(
         {
             var errors = new List<FluentResults.IError>();
             var worksheetRowDocuments = new List<WorksheetRowDocument>();
-            using (var stream = request.Worksheet.OpenReadStream())
+            await using (var stream = request.Worksheet.OpenReadStream())
             {
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
                 {
@@ -49,19 +49,27 @@ public class UploadWorksheetEndpoint(
                     foreach (DataRow row in sheet.Rows)
                     {
                         if (row.IsEmpty())
+                        {
                             continue;
+                        }
 
                         var worksheetRowResult = row.MapToDocument();
                         if (worksheetRowResult.IsFailed)
+                        {
                             errors.AddRange(worksheetRowResult.Errors);
+                        }
                         else
+                        {
                             worksheetRowDocuments.Add(worksheetRowResult.Value);
+                        }
                     }
                 }
             }
 
             if (worksheetRowDocuments.Count == 0)
+            {
                 return FluentResults.Result.Fail("Uploaded worksheet had no parsable rows");
+            }
 
             var worksheetDocument = new WorksheetDocument { Id = Guid.NewGuid(), Rows = worksheetRowDocuments };
             await worksheetCollection.InsertOneAsync(worksheetDocument, null, ct);
