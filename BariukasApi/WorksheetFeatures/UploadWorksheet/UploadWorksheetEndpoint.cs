@@ -16,7 +16,7 @@ public class UploadWorksheetEndpoint(
     public void Map(IEndpointRouteBuilder app)
     {
         app.MapPost("/worksheet",
-            async ([FromForm] UploadWorksheetQuery request, CancellationToken ct) =>
+            async ([FromForm] UploadWorksheetCommand request, CancellationToken ct) =>
             {
                 var result = await Handle(request, ct);
 
@@ -31,7 +31,7 @@ public class UploadWorksheetEndpoint(
             });
     }
 
-    private async Task<FluentResults.Result<UploadWorksheetResponse>> Handle(UploadWorksheetQuery request,
+    private async Task<FluentResults.Result<UploadWorksheetResponse>> Handle(UploadWorksheetCommand request,
         CancellationToken ct)
     {
         try
