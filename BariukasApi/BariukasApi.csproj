@@ -8,6 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="ExcelDataReader" Version="3.9.0"/>
+        <PackageReference Include="ExcelDataReader.DataSet" Version="3.9.0"/>
+        <PackageReference Include="FluentResults" Version="4.0.0"/>
         <PackageReference Include="HotChocolate.AspNetCore" Version="16.6.4"/>
         <PackageReference Include="HotChocolate.AspNetCore.CommandLine" Version="16.6.4"/>
         <PackageReference Include="HotChocolate.Types.Analyzers" Version="16.6.4"/>

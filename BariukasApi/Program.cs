@@ -5,6 +5,8 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 
+System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
 BsonSerializer.TryRegisterSerializer(typeof(Guid), GuidSerializer.StandardInstance);
 var builder = WebApplication.CreateBuilder(args);
 
