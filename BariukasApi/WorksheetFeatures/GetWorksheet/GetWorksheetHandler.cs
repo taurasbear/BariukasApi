@@ -22,6 +22,5 @@ public class GetWorksheetHandler(
         }
 
         return null;
-        // This overfetches the DB but GraphQL will only return the things asked for. In our case, it's not worth optimising this
     }
 }
