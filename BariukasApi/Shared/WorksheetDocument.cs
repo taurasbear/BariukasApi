@@ -1,6 +1,6 @@
 namespace BariukasApi.Shared;
 
-public class WorksheetDocument
+public record WorksheetDocument
 {
     public Guid Id { get; set; }
 
