@@ -1,6 +1,7 @@
 using BariukasApi.Capabilities;
 using BariukasApi.Shared;
 using BariukasApi.WorksheetFeatures.GetWorksheet;
+using BariukasApi.WorksheetFeatures.UploadWorksheet;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
@@ -13,7 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 // TODO: remove the modify request options
 builder.AddGraphQL().AddBariukasApiTypes().ModifyRequestOptions(o => o.IncludeExceptionDetails = true);
 
+// TODO: move some place else
 builder.Services.AddScoped<GetWorksheetHandler>();
+builder.Services.AddScoped<UploadWorksheetCommandHandler>();
+builder.Services.AddScoped<WorksheetDocumentResolvers>();
 
 builder.Services.AddSingleton<IMongoClient>(sp =>
     new MongoClient(builder.Configuration["MongoDB:ConnectionString"]));
@@ -33,7 +37,10 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) app.MapOpenApi();
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
 
 app.UseHttpsRedirection();
 

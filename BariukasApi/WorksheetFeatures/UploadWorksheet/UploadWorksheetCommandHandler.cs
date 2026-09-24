@@ -35,7 +35,8 @@ public class UploadWorksheetCommandHandler(
                         var worksheetRowResult = row.MapToDocument();
                         if (worksheetRowResult.IsFailed)
                         {
-                            errors.AddRange(worksheetRowResult.Errors);
+                            errors.AddRange(worksheetRowResult
+                                .Errors); // TODO: maybe should wrap error to include row number
                         }
                         else
                         {
@@ -47,7 +48,10 @@ public class UploadWorksheetCommandHandler(
 
             if (worksheetRowDocuments.Count == 0)
             {
-                return FluentResults.Result.Fail("Uploaded worksheet had no parsable rows");
+                return new FluentResults.Error(
+                        "Uploaded worksheet had no readable data")
+                    .WithErrorCode(Shared.Constants.ErrorCodes
+                        .PARSING_FAILED); // TODO: add error code and make endpoint pass it
             }
 
             var worksheetDocument = new WorksheetDocument { Id = Guid.NewGuid(), Rows = worksheetRowDocuments };

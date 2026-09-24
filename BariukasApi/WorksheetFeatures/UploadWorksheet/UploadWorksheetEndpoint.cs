@@ -1,28 +1,32 @@
 using BariukasApi.Shared;
+using BariukasApi.Shared.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BariukasApi.WorksheetFeatures.UploadWorksheet;
 
-public class UploadWorksheetEndpoint(UploadWorksheetCommandHandler handler, ILogger<UploadWorksheetEndpoint> logger)
+public class UploadWorksheetEndpoint(ILogger<UploadWorksheetEndpoint> logger)
     : IEndpoint
 {
-    private const string ERROR_REASON = "parsingFailure";
-
     public void Map(IEndpointRouteBuilder app)
     {
         app.MapPost("/worksheet",
-            async ([FromForm] UploadWorksheetCommand request, CancellationToken ct) =>
+            async ([FromForm] UploadWorksheetCommand request, UploadWorksheetCommandHandler handler,
+                CancellationToken ct) =>
             {
                 var result = await handler.HandleAsync(request, ct);
 
-                return result.IsFailed
-                    ? Results.BadRequest(new UploadWorksheetErrorResponse
-                    {
-                        Message = result.Errors.FirstOrDefault()?.Message ??
-                                  "Failed to parse worksheet", // TODO: should I write these in Lithuanian?
-                        Reason = ERROR_REASON
-                    })
-                    : Results.Ok(result.Value);
+                if (result.IsSuccess)
+                {
+                    return Results.Ok(result.Value);
+                }
+
+                var error = result.Errors.First();
+
+                return Results.BadRequest(new UploadWorksheetErrorResponse
+                {
+                    Message = error.Message,
+                    Reason = error.GetErrorCode()
+                });
             });
     }
 }

@@ -4,5 +4,5 @@ public record WorksheetDocument
 {
     public Guid Id { get; set; }
 
-    public ICollection<WorksheetRowDocument> Rows { get; set; } = [];
+    [GraphQLIgnore] public ICollection<WorksheetRowDocument> Rows { get; set; } = [];
 }
