@@ -47,6 +47,7 @@ public static class WorksheetDocumentExtensions
 
             return new WorksheetRowDocument
             {
+                Id = Guid.NewGuid(),
                 Customer = customer,
                 ProductCode = productCode,
                 NormalizedProductCode = normalizedProductCode,
