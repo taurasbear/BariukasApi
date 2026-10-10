@@ -1,6 +1,7 @@
 using BariukasApi.Capabilities;
 using BariukasApi.Shared;
 using BariukasApi.WorksheetFeatures.GetWorksheet;
+using BariukasApi.WorksheetFeatures.IncrementScannedCount;
 using BariukasApi.WorksheetFeatures.UploadWorksheet;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -18,6 +19,7 @@ builder.AddGraphQL().AddBariukasApiTypes().ModifyRequestOptions(o => o.IncludeEx
 builder.Services.AddScoped<GetWorksheetHandler>();
 builder.Services.AddScoped<UploadWorksheetCommandHandler>();
 builder.Services.AddScoped<WorksheetDocumentResolvers>();
+builder.Services.AddScoped<IncrementScannedCountHandler>();
 
 builder.Services.AddSingleton<IMongoClient>(sp =>
     new MongoClient(builder.Configuration["MongoDB:ConnectionString"]));
